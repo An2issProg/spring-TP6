@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="utf-8">
+    <title>Ajout / Modification Produit</title>
+    <link rel="stylesheet"
+          href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"/>
+</head>
+<body>
+<div th:replace="template"></div>
+
+<div class="container mt-5">
+    <div class="card">
+        <!-- Titre conditionnel -->
+        <div class="card-header" th:if="${mode=='new'}">Ajout des Produits</div>
+        <div class="card-header" th:if="${mode=='edit'}">Modification des Produits</div>
+
+        <div class="card-body">
+            <form th:action="@{/saveProduit}" method="post" th:object="${produit}">
+
+                <!-- ID Produit (champ caché) -->
+                <div class="form-group" hidden>
+                    <label class="control-label">ID Produit :</label>
+                    <input type="hidden" name="idProduit" class="form-control"
+                           th:value="${produit.idProduit}" />
+                </div>
+
+                <!-- Nom Produit -->
+                <div class="form-group">
+                    <label class="control-label">Nom Produit :</label>
+                    <input type="text" name="nomProduit" class="form-control"
+                           th:value="${produit.nomProduit}" />
+                    <span th:if="${#fields.hasErrors('nomProduit')}"
+                          th:errors="*{nomProduit}" class="text-danger"></span>
+                </div>
+
+                <!-- Prix Produit -->
+                <div class="form-group">
+                    <label class="control-label">Prix Produit :</label>
+                    <input type="text" name="prixProduit" class="form-control"
+                           th:value="${produit.prixProduit}" />
+                    <span th:if="${#fields.hasErrors('prixProduit')}"
+                          th:errors="*{prixProduit}" class="text-danger"></span>
+                </div>
+
+                <!-- Date Création -->
+                <div class="form-group">
+                    <label class="control-label">Date Création :</label>
+                    <input type="date" name="dateCreation" class="form-control"
+                           th:value="${#dates.format(produit.dateCreation, 'yyyy-MM-dd')}" />
+                    <span th:if="${#fields.hasErrors('dateCreation')}"
+                          th:errors="*{dateCreation}" class="text-danger"></span>
+                </div>
+
+                <!-- Sélection Catégorie -->
+                <div class="form-group">
+                    <label class="control-label">Catégorie :</label>
+
+                    <!-- Mode édition avec catégorie -->
+                    <select name="categorie" class="form-control"
+                            th:value="${produit.categorie.idCat}"
+                            th:if="${!#strings.isEmpty(produit.categorie)}">
+                        <option th:each="c : ${categories}" 
+                                th:value="${c.idCat}" 
+                                th:text="${c.nomCat}"
+                                th:selected="${c.idCat == produit.categorie.idCat}">
+                        </option>
+                    </select>
+
+                    <!-- Mode ajout ou produit sans catégorie -->
+                    <select name="categorie" class="form-control"
+                            th:if="${#strings.isEmpty(produit.categorie)}">
+                        <option th:each="c : ${categories}" 
+                                th:value="${c.idCat}" 
+                                th:text="${c.nomCat}">
+                        </option>
+                    </select>
+                </div>
+
+                <!-- Champs cachés pour pagination -->
+                <input type="hidden" name="page" class="form-control" th:value="${page}" />
+                <input type="hidden" name="size" class="form-control" th:value="${size}" />
+
+                <!-- Bouton de soumission -->
+                <div>
+                    <button type="submit" class="btn btn-primary"
+                            th:text="${mode == 'edit'} ? 'Mettre à jour' : 'Ajouter'">
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
