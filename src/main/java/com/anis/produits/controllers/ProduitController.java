@@ -76,7 +76,7 @@ public class ProduitController {
     }
     
 
-    // Suppression d’un produit
+
     @RequestMapping("/supprimerProduit")
     public String supprimerProduit(
             @RequestParam("id") Long id,
@@ -105,7 +105,6 @@ public class ProduitController {
     modelMap.addAttribute("categories", cats);
     return "formProduit";
     }
-
   
     @RequestMapping("/updateProduit")
     public String updateProduit(

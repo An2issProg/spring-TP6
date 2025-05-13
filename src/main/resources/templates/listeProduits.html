@@ -1,28 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-
 <head>
     <meta charset="utf-8">
     <title>Liste des Produits</title>
     <link rel="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" />
     <style>
         body {
-            background-color: rgb(0, 0, 0);
+            background-color: rgb(192, 192, 192);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
         .card {
             margin-top: 30px;
-            background-color: rgb(128, 0, 64);
+            background-color: rgb(255, 255, 255);
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
         .card-header {
-            background-color: #007bff;
+            background-color: rgb(255, 128, 0);
             color: rgb(64, 0, 64);
             font-size: 1.5rem;
-            border: 2px solid black;
+            border: 2px solid rgb(192, 192, 192);
             text-decoration: underline;
         }
 
@@ -63,9 +62,10 @@
         }
     </style>
 </head>
-
 <body>
-    <div th:replace="template :: navbar"></div>
+
+    <!-- Only include if you have 'template.html' with a fragment 'navbar' -->
+    <!-- <div th:replace="template :: navbar"></div> -->
 
     <div class="container">
         <div class="card">
@@ -73,45 +73,43 @@
                 Liste des Produits
             </div>
             <div class="card-body">
-				<table class="table table-striped">
-				    <thead>
-				        <tr>
-				            <th>ID</th>
-				            <th>Nom Produit</th>
-				            <th>Prix</th>
-				            <th>Catégorie</th>
-				            <th>Actions</th>
-				        </tr>
-				    </thead>
-				    <tbody>
-				        <tr th:each="p : ${produits.content}">
-				            <td th:text="${p.idProduit}"></td>
-				            <td th:text="${p.nomProduit}"></td>
-				            <td th:text="${p.prixProduit}"></td>
-
-				            <!-- Affichage conditionnel de la catégorie -->
-				            <td th:if="${!#strings.isEmpty(p.categorie)}" th:text="${p.categorie.nomCat}"></td>
-				            <td th:if="${#strings.isEmpty(p.categorie)}" th:text="'Pas de Catégorie'"></td>
-
-				            <!-- Boutons Actions -->
-				            <td>
-				                <a class="btn btn-success"
-				                   th:href="@{modifierProduit(id=${p.idProduit}, page=${currentPage}, size=${size})}">Editer</a>
-				                <a class="btn btn-danger"
-				                   th:href="@{supprimerProduit(id=${p.idProduit}, page=${currentPage}, size=${size})}"
-				                   onclick="return confirm('Êtes-vous sûr ?')">Supprimer</a>
-				            </td>
-				        </tr>
-				    </tbody>
-				</table>
-
-
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom Produit</th>
+                            <th>Prix</th>
+                            <th>Catégorie</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="p : ${produits.content}">
+                            <td th:text="${p.idProduit}"></td>
+                            <td th:text="${p.nomProduit}"></td>
+                            <td th:text="${p.prixProduit}"></td>
+                            <td th:text="${p.categorie != null ? p.categorie.nomCat : 'Pas de Catégorie'}"></td>
+                            <td>
+                                <a class="btn btn-success"
+                                   th:href="@{modifierProduit(id=${p.idProduit}, page=${currentPage}, size=${size})}">
+                                   Éditer
+                                </a>
+                                <a class="btn btn-danger"
+                                   th:href="@{supprimerProduit(id=${p.idProduit}, page=${currentPage}, size=${size})}"
+                                   onclick="return confirm('Êtes-vous sûr ?')">
+                                   Supprimer
+                                </a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
                 <ul class="nav nav-pills">
-                    <li th:each="page,status : ${pages}">
-                        <a th:class="${status.index == currentPage ? 'btn btn-primary' : 'btn'}"
+                    <li class="nav-item" th:each="page,status : ${pages}">
+                        <a class="btn"
+                           th:classappend="${status.index == currentPage} ? 'btn-primary' : 'btn-outline-primary'"
                            th:href="@{ListeProduits(page=${status.index}, size=${size})}"
-                           th:text="${status.index}"></a>
+                           th:text="${status.index}">Page</a>
                     </li>
                 </ul>
             </div>

@@ -101,4 +101,9 @@ public class Produit {
         return "Produit [idProduit=" + idProduit + ", nomProduit=" + nomProduit +
                ", prixProduit=" + prixProduit + ", dateCreation=" + dateCreation + "]";
     }
+
+	public void setDateCreation1(Date dateCreation2) {
+		// TODO Auto-generated method stub
+		
+	}
 }
